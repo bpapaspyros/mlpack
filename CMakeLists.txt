@@ -500,6 +500,7 @@ add_definitions(-DMLPACK_CUSTOM_CONFIG_FILE=mlpack/config-local.hpp)
 # Finally, add any cross-compilation support libraries (they may need to come
 # last).  If we are not cross-compiling, no changes will happen here.
 set(MLPACK_LIBRARIES ${MLPACK_LIBRARIES} ${CROSS_COMPILE_SUPPORT_LIBRARIES})
+set(MLPACK_LIBRARIES ${MLPACK_LIBRARIES} PARENT_SCOPE)
 
 # Recurse into the rest of the project.
 add_subdirectory(src/mlpack)

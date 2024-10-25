@@ -110,7 +110,7 @@ class NearestNS
   static size_t GetBestChild(const VecType& queryPoint, TreeType& referenceNode)
   {
     return referenceNode.GetNearestChild(queryPoint);
-  };
+  }
 
   /**
    * Return the best child according to this sort policy. In this case it will
@@ -120,7 +120,7 @@ class NearestNS
   static size_t GetBestChild(const TreeType& queryNode, TreeType& referenceNode)
   {
     return referenceNode.GetNearestChild(queryNode);
-  };
+  }
 
   /**
    * Return what should represent the worst possible distance with this

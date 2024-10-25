@@ -592,7 +592,7 @@ if (PKG_CONFIG_FOUND)
           -P "${CMAKE_CURRENT_SOURCE_DIR}/CMake/GeneratePkgConfig.cmake"
       COMMENT "Generating mlpack.pc (pkg-config) file.")
 
-  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/pkgconfig/mlpack.pc"
+  install(FILES "${CMAKE_BINARY_DIR}/lib/pkgconfig/mlpack.pc"
       DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig/")
 
 endif ()

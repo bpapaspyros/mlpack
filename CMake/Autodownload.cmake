@@ -6,6 +6,7 @@
 ## which means that you need to set the main path for the include
 ## directories for each package.
 ## Note that, the package should be compressed only as .tar.gz
+
 macro(get_deps LINK DEPS_NAME PACKAGE)
   if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/deps/${PACKAGE}")
     file(DOWNLOAD ${LINK}

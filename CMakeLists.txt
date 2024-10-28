@@ -507,6 +507,11 @@ endif ()
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/include/mlpack/config-local.hpp "${CONFIG_CONTENTS}")
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/)
 add_definitions(-DMLPACK_CUSTOM_CONFIG_FILE=mlpack/config-local.hpp)
+if (NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  # todo(bpapaspyros): this is not very nice but gets the job done 
+  file(COPY ${CMAKE_CURRENT_BINARY_DIR}/include/mlpack/config-local.hpp 
+       DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/src/mlpack/include/mlpack/)
+endif()
 
 # Finally, add any cross-compilation support libraries (they may need to come
 # last).  If we are not cross-compiling, no changes will happen here.
@@ -586,11 +591,22 @@ if (PKG_CONFIG_FOUND)
     ${CMAKE_CURRENT_SOURCE_DIR}/CMake/mlpack.pc.in
     ${CMAKE_CURRENT_BINARY_DIR}/CMake/mlpack.pc.in.partial @ONLY)
 
-  add_custom_target(pkgconfig ALL
-      ${CMAKE_COMMAND}
-          -D MLPACK_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
-          -P "${CMAKE_CURRENT_SOURCE_DIR}/CMake/GeneratePkgConfig.cmake"
-      COMMENT "Generating mlpack.pc (pkg-config) file.")
+  if (NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(PKGCONFIG_OUTPUT_DIR "${CMAKE_BINARY_DIR}/lib/pkgconfig")
+    file(MAKE_DIRECTORY "${PKGCONFIG_OUTPUT_DIR}")
+    add_custom_target(pkgconfig ALL
+        ${CMAKE_COMMAND}
+            -D MLPACK_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+            -D PKGCONFIG_OUTPUT_DIR="${PKGCONFIG_OUTPUT_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/CMake/GeneratePkgConfig.cmake"
+        COMMENT "Generating mlpack.pc (pkg-config) file.")
+   else()
+     add_custom_target(pkgconfig ALL
+     ${CMAKE_COMMAND}
+         -D MLPACK_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+         -P "${CMAKE_CURRENT_SOURCE_DIR}/CMake/GeneratePkgConfig.cmake"
+     COMMENT "Generating mlpack.pc (pkg-config) file.")
+   endif()
 
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/pkgconfig/mlpack.pc"
       DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig/")
